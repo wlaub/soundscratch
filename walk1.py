@@ -13,10 +13,12 @@ def walk():
     r = random.random()*2-1
     return 1 if r > 0 else -.99
 
-def tone(phase):
-    coeffs = [2**n/12. for n in range(4)]    
-    v = sum([x*math.sin(phase*(i+10)) for i,x in enumerate(coeffs)])
-    return v
+def tone(N):
+    def func(phase):
+        coeffs = [2**n/12. for n in range(4)]    
+        v = sum([x*math.sin(phase*(i+N)) for i,x in enumerate(coeffs)])
+        return v
+    return func
 
 def do_sound(vals, f, l, phase, w, tfunc, wfunc = walk):
     accum = 0
@@ -48,9 +50,9 @@ for j in range(10):
     f1 = ratio*f
     f2 = f
 
-    phase = do_sound(vals, fixed(f1), N*(l1-ls), phase, w, tone)
-    phase = do_sound(vals, sliding(f1, f2, N*ls), N*ls, phase, w, tone)
-    phase = do_sound(vals, fixed(f2), N*l2, phase, w, tone)
+    phase = do_sound(vals, fixed(f1), N*(l1-ls), phase, w, tone(15+j))
+    phase = do_sound(vals, sliding(f1, f2, N*ls), N*ls, phase, w, tone(15+j))
+    phase = do_sound(vals, fixed(f2), N*l2, phase, w, tone(15+j))
 
 sd.play(vals, blocking = True, samplerate=fs)
 
