@@ -37,6 +37,8 @@ size = (w+axsize, h+axsize+fsize)
 
 screen = pygame.display.set_mode(size)
 
+pygame.display.set_caption('graphWaker')
+
 xmin = size[0]*.1
 xmax = size[0]*.9
 ymin = size[1]*.9
@@ -66,7 +68,7 @@ pygame.mouse.set_visible(False)
 firstsel = True
 
 while 1:
-    time.sleep(.1)
+    time.sleep(.05)
     mpos = pygame.mouse.get_pos()
     dx = 0
     dy = 0
@@ -74,7 +76,6 @@ while 1:
         if event.type == pygame.QUIT:
             exit()
         elif event.type == pygame.KEYDOWN:
-            print(event.key)
             if event.key in map(ord,keys):
                 if firstsel: scales[scalesel] = ''
                 firstsel = False
@@ -143,8 +144,6 @@ while 1:
     xpos = xvmin + (mpos[0] - xmin)*xscale
     ypos = yvmin + (mpos[1] - ymin)*yscale
 
-    print(xpos, ypos)
-
     screen.fill(bgcolor)
 
     screen.blit(clip, (axsize, fsize))
@@ -175,7 +174,7 @@ while 1:
 
     if not axmove and mpos[0] > axsize and mpos[1] > fsize and mpos[1] < size[1]-axsize:
         txt = font.render(('({}, {})'.format(*[sfmt]*2)).format(xpos, ypos), True, txtcolor, bgcolor)
-        screen.blit(txt, mpos)
+        screen.blit(txt, map(lambda x: x+1, mpos))
 
     pygame.draw.line(screen, fgcolor, (mpos[0]-csize, mpos[1]), (mpos[0]+csize, mpos[1]))
     pygame.draw.line(screen, fgcolor, (mpos[0], mpos[1]-csize), (mpos[0], mpos[1]+csize))
